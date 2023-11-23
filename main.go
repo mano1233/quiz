@@ -29,13 +29,13 @@ func main() {
 	problems := parseLines(lines)
 
 	for i, p := range problems {
-		fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
 		isCorrect := false
 		var userinput string
 		for !isCorrect {
+			fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
 			fmt.Scanf("%s\n", &userinput)
 			if userinput == p.a {
-				fmt.Printf("Correct!")
+				fmt.Printf("Correct!\n")
 				isCorrect = true
 			} else {
 				fmt.Printf("Incorrect!\n")
