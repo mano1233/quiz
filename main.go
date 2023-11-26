@@ -29,15 +29,15 @@ func main() {
 		exit("Can't parse CSV file")
 	}
 	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
-	<-timer.C
 	problems := parseLines(lines)
 	numCorrect := 0
 	for i, p := range problems {
 		fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
 		answerCh := make(chan string)
 		go func() {
-			var userinput string
-			fmt.Scanf("%s\n", &userinput)
+			var userInput string
+			fmt.Scanf("%s\n", &userInput)
+			answerCh <- userInput
 		}()
 		select {
 		case <-timer.C:
@@ -45,14 +45,12 @@ func main() {
 			fmt.Printf("You managed to answer %d correct problems out of %d, your percentage is %f \n", numCorrect, len(problems), pct)
 			return
 		case answer := <-answerCh:
-			go func() {
-				if answer == p.a {
-					fmt.Printf("Correct!\n")
-					numCorrect++
-				} else {
-					fmt.Printf("Incorrect!\n")
-				}
-			}()
+			if answer == p.a {
+				fmt.Printf("Correct!\n")
+				numCorrect++
+			} else {
+				fmt.Printf("Incorrect!\n")
+			}
 		}
 	}
 	pct := float64(numCorrect) / float64(len(problems)) * 100
